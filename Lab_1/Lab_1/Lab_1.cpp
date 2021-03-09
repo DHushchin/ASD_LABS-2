@@ -72,6 +72,7 @@ void Terri_algo(int** matr, int n, int m, int beg_v, int end_v, stack <int>& res
     if (beg_v == end_v)
     {
         res.push(beg_v);
+        cout << endl;
         cout << "Route: ";
         print_stack(res);
         flag = true;
@@ -81,12 +82,24 @@ void Terri_algo(int** matr, int n, int m, int beg_v, int end_v, stack <int>& res
         for (int j = 0; j < m; j++) {
             if (matr[beg_v][j] == 1)
             {
-                if (in_stack(res, beg_v) == false) res.push(beg_v);
+                if (in_stack(res, beg_v) == false) {
+                    res.push(beg_v);
+                    if (res.empty() == false) {
+                        cout << endl;
+                        print_stack(res);
+                    }
+                }
                 int vetr = find_vetr(matr, n, j, res);
                 if (vetr != -1) Terri_algo(matr, n, m, vetr, end_v, res, flag);
             }
         }
-        if (flag == false) res.pop();
+        if (flag == false) {
+            res.pop();
+            if (res.empty() == false) {
+                cout << endl;
+                print_stack(res);
+            }
+        }
     }
 }
 
