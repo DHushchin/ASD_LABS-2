@@ -14,10 +14,12 @@ int** CreateMatrix(int&);
 void FillMatrix(int**, int&);
 void DeleteMatrix(int**, int&);
 void PrintMatrix(int** Matrix, int& size, string str);
+void PrintNewMatrix(int** p, int& size, string str);
 void Floyd_Warshall(int** Matrix, int size, int** p);
 int MinValue(int a, int b);
 int** CreateP(int** Matrix, int& size);
 void IncrementP(int** p, int& size);
+void show_path(int u, int v, int** p);
 vector<string> delim(string str, char delim);
 
 
@@ -27,9 +29,9 @@ int main()
     int** Matrix = ReadFile(size);
     int** p = CreateP(Matrix, size);
     Floyd_Warshall(Matrix, size, p);
-    IncrementP(p, size);
     PrintMatrix(Matrix, size, "D(m): ");
-    PrintMatrix(p, size, "P(ij): ");
+    PrintNewMatrix(p, size, "P(ij): ");
+    show_path(4, 1, p);
     DeleteMatrix(Matrix, size);
     DeleteMatrix(p, size);
 }
@@ -46,7 +48,7 @@ int** ReadFile(int& size) {
 
 
 void FindSize(int& size) {
-    ifstream input("..\\iofiles\\input_15.txt");
+    ifstream input("..\\iofiles\\input_lecture.txt");
     string currStr;
     size = -1;
     while (!input.eof()) {
@@ -85,7 +87,7 @@ void PrintMatrix(int** Matrix, int& size, string str) {
 
 
 void FillMatrix(int** Matrix, int& size) {
-    ifstream input("..\\iofiles\\input_15.txt");
+    ifstream input("..\\iofiles\\input_lecture.txt");
 
     for (int i = 0; i < size; i++)
     {
@@ -132,6 +134,8 @@ void Floyd_Warshall(int** Matrix, int size, int** p) {
 }
 
 
+
+
 int MinValue(int a, int b) {
     int min;
     (a <= b) ? min = a : min = b;
@@ -175,4 +179,40 @@ void IncrementP(int** p, int& size) {
             if (p[i][j] != -1) ++p[i][j];
         }
     }
+}
+
+
+void show_path(int u, int v, int** p)
+{
+    --u;
+    --v;
+    if (p[v][u] == -1)
+    {
+        printf("No path\n");
+        return;
+    }
+
+    int x = u;
+
+
+    while (x != v)
+    {
+        cout << x + 1 << ' ';
+        x = p[v][x];
+    }
+    cout << v + 1 << ' ';
+}
+
+void PrintNewMatrix(int** p, int& size, string str) {
+    cout << str << endl;
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < size; j++)
+        {
+            cout << setw(6) << p[i][j] + 1 << ' ';
+        }
+        cout << endl;
+    }
+    cout << endl;
+
 }
