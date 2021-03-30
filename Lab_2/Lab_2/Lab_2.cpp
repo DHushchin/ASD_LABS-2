@@ -3,18 +3,21 @@
 #include <string>
 #include <vector>
 #include <iomanip>
-#define INF 1000
+
 using namespace std;
+
+const int INF = 1000;
 
 int** ReadFile(int& size);
 void FindSize(int& size);
 int** CreateMatrix(int&);
 void FillMatrix(int**, int&);
 void DeleteMatrix(int**, int&);
-void PrintMatrix(int** Matrix, int& size);
-void Output(int** Matrix, int size);
-void Floyd_Warshall(int** Matrix, int size);
-int min_value(int a, int b);
+void PrintMatrix(int** Matrix, int& size, string str);
+void Floyd_Warshall(int** Matrix, int size, int** p);
+int MinValue(int a, int b);
+int** CreateP(int** Matrix, int& size);
+void IncrementP(int** p, int& size);
 vector<string> delim(string str, char delim);
 
 
@@ -22,10 +25,13 @@ int main()
 {
     int size;
     int** Matrix = ReadFile(size);
-    Floyd_Warshall(Matrix, size);
-    PrintMatrix(Matrix, size);
-    Output(Matrix, size);
+    int** p = CreateP(Matrix, size);
+    Floyd_Warshall(Matrix, size, p);
+    IncrementP(p, size);
+    PrintMatrix(Matrix, size, "D(m): ");
+    PrintMatrix(p, size, "P(ij): ");
     DeleteMatrix(Matrix, size);
+    DeleteMatrix(p, size);
 }
 
 
@@ -34,9 +40,10 @@ int** ReadFile(int& size) {
     int** Matrix = CreateMatrix(size);
     cout << "Reading file..." << endl << endl;
     FillMatrix(Matrix, size);
-    PrintMatrix(Matrix, size);
+    PrintMatrix(Matrix, size, "D(0): ");
     return Matrix;
 }
+
 
 void FindSize(int& size) {
     ifstream input("..\\iofiles\\input_15.txt");
@@ -52,6 +59,7 @@ void FindSize(int& size) {
     input.clear();
 }
 
+
 int** CreateMatrix(int& size) {
     int** Matrix = new int* [size];
     for (int i = 0; i < size; i++)
@@ -61,8 +69,9 @@ int** CreateMatrix(int& size) {
     return Matrix;
 }
 
-void PrintMatrix(int** Matrix, int& size) {
-    cout << "Weight matrix:" << endl;
+
+void PrintMatrix(int** Matrix, int& size, string str) {
+    cout << str << endl;
     for (int i = 0; i < size; i++)
     {
         for (int j = 0; j < size; j++)
@@ -73,6 +82,7 @@ void PrintMatrix(int** Matrix, int& size) {
     }
     cout << endl;
 }
+
 
 void FillMatrix(int** Matrix, int& size) {
     ifstream input("..\\iofiles\\input_15.txt");
@@ -96,6 +106,7 @@ void FillMatrix(int** Matrix, int& size) {
     input.clear();
 }
 
+
 void DeleteMatrix(int** Matrix, int& size) {
     for (int i = 0; i < size; i++)
     {
@@ -104,38 +115,29 @@ void DeleteMatrix(int** Matrix, int& size) {
     delete Matrix;
 }
 
-void Output(int** Matrix, int size)
-{
-    ofstream output("..\\iofiles\\output.txt");
-    for (int i = 0; i < size; i++)
-    {
-        for (int j = 0; j < size; j++)
-        {
-            output << Matrix[i][j] << ' ';
-        }
-        output << endl;
-    }
-    output.close();
-    cout << "Saved to output.txt" << endl;
-}
 
-void Floyd_Warshall(int** matrix, int size) {
+void Floyd_Warshall(int** Matrix, int size, int** p) {
     for (int k = 0; k < size; k++) {  //Run through all vertexes and find the shoutest route throgh vertex k
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if (matrix[i][k] && matrix[k][j] && i != j)
-                    matrix[i][j] = min_value(matrix[i][j], matrix[i][k] + matrix[k][j]); 
+                if (Matrix[i][k] && Matrix[k][j] && i != j)
+                {
+                    Matrix[i][j] = MinValue(Matrix[i][j], Matrix[i][k] + Matrix[k][j]);
                     // New weight is minimal between new sum of edges / old one
+                    if (Matrix[i][j] == Matrix[i][k] + Matrix[k][j]) p[i][j] = k;
+                }
             }
         }
     }
 }
 
-int min_value(int a, int b) {
+
+int MinValue(int a, int b) {
     int min;
-    (a < b) ? min = a : min = b;
+    (a <= b) ? min = a : min = b;
     return min;
 }
+
 
 vector<string> delim(string str, char delim) {
     int start, end = 0;
@@ -150,4 +152,27 @@ vector<string> delim(string str, char delim) {
         vect.push_back(word);
     }
     return vect;
+}
+
+
+int** CreateP(int** graph, int& size) {
+    int** Matrix = new int* [size];
+    for (int i = 0; i < size; i++) 
+        Matrix[i] = new int[size];
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            if (graph[i][j] != 0 && graph[i][j] != INF) Matrix[i][j] = i;
+            else Matrix[i][j] = -1;
+        }
+    }
+    return Matrix;
+}
+
+
+void IncrementP(int** p, int& size) {
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            if (p[i][j] != -1) ++p[i][j];
+        }
+    }
 }
