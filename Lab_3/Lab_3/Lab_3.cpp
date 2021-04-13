@@ -10,7 +10,6 @@ int main()
     int** Matrix = ReadFile(size);
     int VertexAmount = 15;
     int ChromNum = FindChrom(Matrix, VertexAmount);
-    std::cout << "Chromatic number: " << ChromNum << std::endl; 
     ColoringAlgo(Matrix, ChromNum, VertexAmount);
     DeleteMatrix(Matrix, size);
     system("pause");

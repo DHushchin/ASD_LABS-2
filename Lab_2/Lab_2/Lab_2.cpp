@@ -48,7 +48,7 @@ int** ReadFile(int& size) {
 
 
 void FindSize(int& size) {
-    ifstream input("..\\iofiles\\input_lecture.txt");
+    ifstream input("..\\iofiles\\input_7.txt");
     string currStr;
     size = -1;
     while (!input.eof()) {
@@ -87,7 +87,7 @@ void PrintMatrix(int** Matrix, int& size, string str) {
 
 
 void FillMatrix(int** Matrix, int& size) {
-    ifstream input("..\\iofiles\\input_lecture.txt");
+    ifstream input("..\\iofiles\\input_7.txt");
 
     for (int i = 0; i < size; i++)
     {
@@ -132,8 +132,6 @@ void Floyd_Warshall(int** Matrix, int size, int** p) {
         }
     }
 }
-
-
 
 
 int MinValue(int a, int b) {

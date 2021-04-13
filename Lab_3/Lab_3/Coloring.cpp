@@ -7,7 +7,7 @@ void Result(int* ColorsArr, int VertexAmount)
         if (max < ColorsArr[i])
             max = ColorsArr[i];
 
-    std::cout << "Minimumal chromatic number: " << max << endl << endl;
+    cout << "Сhromatic number: " << max << endl << endl;
 
     vector<string> names = { "Бричанский","Окницкий","Единецкий","Дондюшанский","Рышканский","Дрокиевский","Сорокский","Глодянский",
                             "Бельцы","Флорештский","Сынжерейский","Фалештский","Шолданешский", "Резинский", "Телештский" };
@@ -15,6 +15,7 @@ void Result(int* ColorsArr, int VertexAmount)
     cout << " Graph coloring: " << endl;
     for (int i = 0; i < VertexAmount; i++)
         cout << setw(15) << names[i] << setw(3) << ColorsArr[i] << endl;
+    cout << endl;
 }
 
 bool isSafe(int v, int** Matrix, int* ColorsArr, int CurrColor, int VertexAmount)
