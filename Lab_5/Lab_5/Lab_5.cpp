@@ -1,6 +1,8 @@
 ﻿#include <iostream>
 #include <vector>
 
+const int COUNT = 10;
+
 using namespace std;
 
 struct Node {
@@ -14,10 +16,13 @@ Node* Insert(Node* root, int data);
 void printLevel(Node* node, int level, vector<int>& vect);
 Node* FillTree(Node* root);
 void GetLevel(Node* root);
+void ShowTree(Node* root, int space);
 
 int main() {
     Node* root = NULL;
     root = FillTree(root);
+    ShowTree(root, 0);
+    cout << endl;
     GetLevel(root);
     system("pause");
     return 0;
@@ -78,4 +83,23 @@ void GetLevel(Node* root) {
     for (int i = 0; i < vect.size(); i++)
         cout << vect[i] << "  ";
     cout << endl;
+}
+
+void ShowTree(Node* root, int space)
+{
+    if (root == NULL)
+        return;
+
+    // Increase distance between levels 
+    space += COUNT;
+
+    ShowTree(root->right, space);
+
+    // Print current node
+    cout << endl;
+    for (int i = COUNT; i < space; i++)
+        cout << " ";
+    cout << root->data << "\n";
+
+    ShowTree(root->left, space);
 }
