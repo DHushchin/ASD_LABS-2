@@ -99,7 +99,7 @@ void ShowTree(Node* root, int space)
     cout << endl;
     for (int i = COUNT; i < space; i++)
         cout << " ";
-    cout << root->data << "\n";
+    cout << root->data << endl;
 
     ShowTree(root->left, space);
 }
